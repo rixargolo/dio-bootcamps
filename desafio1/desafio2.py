@@ -1,11 +1,13 @@
 import textwrap
 import os
+#Este código vai funcionar 100% apenas no Windows
 
 def menu():
+  os.system('cls')
   menu = """\n
   =============== MENU ===============
   [d]\tDepositar
-  [s]\tSavar
+  [s]\tSacar
   [x]\tExtrato
   [nc]\tNova conta
   [lc]\tListar contas
@@ -15,21 +17,19 @@ def menu():
   return input(textwrap.dedent(menu))
 
 def depositar(saldo, valor, extrato, /):
-  os.system('cls')
   if valor > 0:
     saldo += valor
     extrato.append(f'Depósito: R$ {valor:.2f}')
-    print(f'O valor de R$ {valor:.2f} foi depositado em sua conta.')
+    print(f'O valor de R$ {valor:.2f} foi depositado em sua conta.\n')
     input('Pressione ENTER para retornar ao menu...')
     os.system('cls')
   else:
-    print('!! Falha na operação !! Valor informado não é válido :(')
+    print('!! Falha na operação !! Valor informado não é válido :(\n')
     input('Pressione ENTER para retornar ao menu...')
     os.system('cls')
-  return saldo 
+  return saldo, extrato 
 
 def sacar(*, saldo, valor, extrato, limite, numero_saques, limite_saques):
-  os.system('cls')
   excedeu_saldo = valor > saldo
   excedeu_limite = valor > limite
   excedeu_saques = numero_saques >= limite_saques
@@ -88,16 +88,31 @@ def criar_usuario(usuarios):
     input('Pressione ENTER para retornar ao menu...')
     os.system('cls')
     return
+  
+  nome = input('Informe seu nome completo: ')
+  data_nascimento = input('Informe sua data de nascimento (dd/mm/aaa): ')
+  email = input('Informe seu email: ')
 
+  usuarios.append({'nome': nome, 'data_nascimento': data_nascimento, 'cpf': cpf, 'email': email})
+
+  print(':: Usuário criado com sucesso! ::\n')
+    
 def filtrar_usuario(cpf, usuarios):
-  return
+  usuarios_filtrados = [usuario for usuario in usuarios if usuario['cpf'] == cpf]
+  return usuarios_filtrados[0] if usuarios_filtrados else None
 
 def criar_conta(agencia, numero_conta, usuarios):
-  return
+  cpf = input('Informe o CPF do usuário: ')
+  usuario = filtrar_usuario(cpf, usuarios)
+  
+  if usuario:
+    print('\n:: Conta criada com sucesso! ::')
+    return {'agencia': agencia, 'numero_conta': numero_conta, 'usuario': usuario}
+
+print('\n!! Falha na operação !!\n Usuário não encontrado - A conta não foi criada')
 
 def listar_contas():
   return
-
 
 def main():
   LIMITE_SQUES = 3
@@ -114,11 +129,13 @@ def main():
     opcao = menu()
     
     if opcao == 'd':
+      os.system('cls')
       valor = float(input('Informe o valor para depósito: '))
       
       saldo, extrato = depositar(saldo, valor, extrato)      
     
     elif opcao == 's':
+      os.system('cls')
       valor = float(input('Informe o valor do saque: '))
       
       saldo, extrato = sacar(
@@ -130,9 +147,11 @@ def main():
         limite_saques=LIMITE_SQUES,
       )
 
+    
     elif opcao == 'x':
       exibir_extrato(saldo, extrato=extrato)
 
+    
     elif opcao == 'nc':
       numero_conta = len(contas) + 1
       conta = criar_conta(AGENCIA, numero_conta, usuarios)
@@ -145,10 +164,15 @@ def main():
 
     elif opcao == 'nu':
       criar_usuario(usuarios)
-    
+   
     elif opcao == 'q':
       os.system('cls')
       print('\n\nObrigado por utilizar nosso Banco :)\n\n')
       break
+    
+    else:
+      print('A letra informada não é válida')
+      input('Pressione ENTER para retornar ao menu...')
+      os.system('cls')      
 
 main()
