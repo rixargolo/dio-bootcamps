@@ -1,2 +1,2 @@
-# dio-bootcamp-potenciatech
-Repositório para armazenar e compartilhar códigos de desafios de projeto do Bootcamp Potência Tech da DIO
+# dio-bootcamp-dio
+Repositório para armazenar e compartilhar códigos de desafios de projeto dos Bootcamps da DIO
